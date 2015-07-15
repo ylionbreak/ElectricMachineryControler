@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ElectricMachineryControler</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">setting</string>
+    <string name="ParameterConfigureActivityTitle">参数配置</string>
+    <string name="SystemConfigureActivityTitle">系统参数配置</string>
+    <string name="ChooseFirmware">选择固件</string>
+    <string name="CAN">CAN阻抗:</string>
+    <string name="WatchWindow">监视窗口:</string>
+    <string name="BianMaQi">编码器:</string>
+    <string name="JianSuBi">减速比:</string>
+    <string name="EDingDianYa">额定电压:</string>
+    <string name="FengZhiDianYa">峰值电压:</string>
+    <string name="SuoDingDianLiu">锁定电流:</string>
+    <string name="FengZhiDianLiu">峰值电流:</string>
+    <string name="ZuiDaJiaSuDu">最大加速度:</string>
+    <string name="DianJiFangXiang">电机方向:</string>
+    <string name="Title">伺服电机上位机</string>
+
+</resources>
