@@ -7,57 +7,10 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
+
         android:layout_height="400dp">
 
-        <TabHost
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@android:id/tabhost">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical">
-
-                <TabWidget
-                    android:id="@android:id/tabs"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
-                </TabWidget>
-
-                <FrameLayout
-                    android:id="@android:id/tabcontent"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                    <LinearLayout
-                        android:id="@+id/tab1"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tab2"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/tab3"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:orientation="vertical">
-
-                    </LinearLayout>
-
-
-                </FrameLayout>
-            </LinearLayout>
-        </TabHost>
     </LinearLayout>
 
     <LinearLayout
@@ -135,53 +88,57 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <Button
+            <com.gc.materialdesign.views.ButtonRectangle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="自整定"
+                android:layout_alignParentLeft="true"
                 android:id="@+id/button5"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>
 
-            <Button
+            <com.gc.materialdesign.views.ButtonRectangle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="测试"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:id="@+id/button6"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>
 
-            <Button
+            <com.gc.materialdesign.views.ButtonRectangle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:text="更新参数"
                 android:id="@+id/button7"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <Button
+            <com.gc.materialdesign.views.ButtonRectangle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="返回设置参数"
                 android:id="@+id/button8"/>
 
-            <Button
+            <com.gc.materialdesign.views.ButtonRectangle
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:text="进入指令测试"
-                android:id="@+id/button9"/>
+                android:id="@+id/enterTestOrder"/>
         </RelativeLayout>
 
     </LinearLayout>

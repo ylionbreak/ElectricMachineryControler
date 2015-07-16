@@ -17,7 +17,7 @@
         </activity>
 
         <activity
-            android:name=".SetPID">
+            android:name=".SetPIDActivity">
         </activity>
 
         <activity
@@ -33,7 +33,8 @@
         </activity>
 
         <activity
-            android:name=".TestOrder">
+            android:label="@string/TestOrder"
+            android:name=".TestOrderActivity">
         </activity>
 
     </application>

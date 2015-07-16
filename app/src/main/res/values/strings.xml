@@ -18,5 +18,5 @@
     <string name="ZuiDaJiaSuDu">最大加速度:</string>
     <string name="DianJiFangXiang">电机方向:</string>
     <string name="Title">伺服电机上位机</string>
-
+    <string name="TestOrder">测试指令</string>
 </resources>
