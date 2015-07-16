@@ -24,9 +24,7 @@ public class SetPIDActivity extends ActionBarActivity {
 	ButtonRectangle enterTestOrderButton;
 	Toolbar toolbar;
 
-	private TabPageIndicator mIndicator ;
-	private ViewPager mViewPager ;
-	private FragmentPagerAdapter mAdapter ;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
