@@ -48,5 +48,13 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="testCircleButton">
+        <item name="android:background">#03A9F4</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>
 

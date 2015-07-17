@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:background="@color/white"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:minHeight="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_blue">
+        </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="50dp"
+            android:textColor="@color/primary_blue"
+            android:textSize="25sp"
+            android:text="伺服电机上位机"
+            android:id="@+id/textView16"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
+            android:layout_marginTop="70dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:background="#03A9F4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="电流环测试"
+            android:layout_alignRight="@+id/oneView"
+
+            android:id="@+id/IcircleTest"/>
+
+        <View
+            android:id="@+id/oneView"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_width="1px"
+            android:layout_height="10px"
+            android:background="@color/white"
+            />
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:background="#03A9F4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="驱动器配置"
+            android:layout_alignLeft="@+id/oneView"
+            android:id="@+id/quDongSet"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:background="#03A9F4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="速度环测试"
+            android:layout_alignRight="@+id/twoView"
+            android:id="@+id/VcircleTest"/>
+
+        <View
+            android:id="@+id/twoView"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_width="1px"
+            android:layout_height="10px"
+            android:background="@color/white"
+            />
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:background="#03A9F4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="指令集测试"
+            android:layout_alignLeft="@+id/twoView"
+            android:id="@+id/testOrder"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:background="#03A9F4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="位置环测试"
+            android:layout_alignRight="@+id/threeView"
+            android:id="@+id/PcircleTest"/>
+
+        <View
+            android:id="@+id/threeView"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_width="1px"
+            android:layout_height="10px"
+            android:background="@color/white"
+            />
+
+        <com.gc.materialdesign.views.ButtonRectangle
+            android:background="#03A9F4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="关于驱动器"
+            android:layout_alignLeft="@+id/threeView"
+            android:id="@+id/aboutQudong"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <com.gc.materialdesign.views.ButtonFlat
+            android:layout_centerHorizontal="true"
+            android:background="#03A9F4"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="蓝牙连接"
+            android:id="@+id/connect"/>
+    </RelativeLayout>
+
+</LinearLayout>

@@ -1,40 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hzl.electricmachinerycontroler" >
+
+          package="hzl.electricmachinerycontroler">
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
-            android:name=".ParameterConfigureActivity"
-            android:label="@string/ParameterConfigureActivityTitle" >
+            android:name=".MainActivity"
+            android:label="伺服电机上位机" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <activity android:name="app.akexorcist.bluetoothspp.DeviceList" />
+
         <activity
+            android:name=".ParameterConfigureActivity"
+            android:label="@string/ParameterConfigureActivityTitle" >
+        </activity>
+
+        <activity
+            android:name=".TestCircleAcitvity">
+        </activity>
+
+        <activity
+            android:label="设置PID参数"
             android:name=".SetPIDActivity">
         </activity>
 
-        <activity
-            android:name=".SpeedCircle">
-        </activity>
+        <!--<activity-->
+            <!--android:name=".SpeedCircle">-->
+        <!--</activity>-->
 
-        <activity
-            android:name=".ElectricCircle">
-        </activity>
+        <!--<activity-->
+            <!--android:name=".ElectricCircle">-->
+        <!--</activity>-->
 
-        <activity
-            android:name=".LocationCircle">
-        </activity>
+        <!--<activity-->
+            <!--android:name=".LocationCircle">-->
+        <!--</activity>-->
 
         <activity
             android:label="@string/TestOrder"
             android:name=".TestOrderActivity">
+        </activity>
+
+        <activity
+            android:name=".AboutQudongActivity">
         </activity>
 
     </application>

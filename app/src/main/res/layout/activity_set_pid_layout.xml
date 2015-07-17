@@ -1,146 +1,295 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
+              xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+              android:background="@color/white"
+              tools:context=".SetPID"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-
-        android:layout_height="400dp">
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.v7.widget.Toolbar
+        android:minHeight="?attr/actionBarSize"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/dark_blue">
+    </android.support.v7.widget.Toolbar>
 
+    <com.gc.materialdesign.views.ScrollView
+        android:id="@+id/scroll"
+        android:clickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
         <LinearLayout
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="超调量:"
-                android:id="@+id/textView11"/>
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text=" "
-                android:id="@+id/textView12"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="收敛时间:"
-                android:id="@+id/textView13"/>
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:text=" "
-                android:id="@+id/textView14"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="P:"
-                android:id="@+id/PText"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="400dp">
 
-            <EditText
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText2"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <com.gc.materialdesign.views.ButtonFlat
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:text="速度环"
+                        android:id="@+id/button10"/>
+                    <View
+                        android:layout_width="3px"
+                        android:layout_height="40dp"
+                        android:background="@color/primary_blue"
+                        />
+                    <com.gc.materialdesign.views.ButtonFlat
+                        android:background="@color/divid_color"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="电流环"
+                        android:id="@+id/button11"/>
+                    <View
+                        android:layout_width="3px"
+                        android:layout_height="40dp"
+                        android:background="@color/primary_blue"
+                        />
+                    <com.gc.materialdesign.views.ButtonFlat
+                        android:background="@color/divid_color"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:text="位置环"
+                        android:id="@+id/button12"/>
+                </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="I:"
-                android:id="@+id/IText"/>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="3px"
+                    android:background="@color/primary_blue"
+                    />
 
-            <EditText
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText3"/>
+            </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="D:"
-                android:id="@+id/DText"/>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:layout_width="85dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/editText4"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="超调量:"
+                        android:id="@+id/textView11"/>
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text=" "
+                        android:id="@+id/textView12"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="收敛时间:"
+                        android:id="@+id/textView13"/>
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:text=" "
+                        android:id="@+id/textView14"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="幅值:"
+                        android:id="@+id/fuZhiText"/>
+
+                    <EditText
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:id="@+id/fuZhiEdit"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="电流环   "
+                        android:id="@+id/IcirclePidText"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P:"
+                        android:id="@+id/IPText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/IPEdit"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I:"
+                        android:id="@+id/IIText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/IIEdit"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="D:"
+                        android:id="@+id/IDText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/IDEdit"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="速度环   "
+                        android:id="@+id/VcirclePidText"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P:"
+                        android:id="@+id/VPText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/VPEdit"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I:"
+                        android:id="@+id/VIText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/VIEdit"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="D:"
+                        android:id="@+id/VDText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/VDEdit"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="位置环   "
+                        android:id="@+id/PcirclePidText"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="P:"
+                        android:id="@+id/PPText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/PPEdit"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="I:"
+                        android:id="@+id/PIText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/PIEdit"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="D:"
+                        android:id="@+id/PDText"/>
+
+                    <EditText
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/PDEdit"/>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <com.gc.materialdesign.views.ButtonRectangle
+                        android:background="#03A9F4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="自整定"
+                        android:layout_alignParentLeft="true"
+                        android:id="@+id/button5"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"/>
+
+                    <com.gc.materialdesign.views.ButtonRectangle
+                        android:background="#03A9F4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="测试"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/button6"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"/>
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <com.gc.materialdesign.views.ButtonRectangle
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="自整定"
-                android:layout_alignParentLeft="true"
-                android:id="@+id/button5"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-
-            <com.gc.materialdesign.views.ButtonRectangle
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="测试"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:id="@+id/button6"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-
-            <com.gc.materialdesign.views.ButtonRectangle
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="更新参数"
-                android:id="@+id/button7"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <com.gc.materialdesign.views.ButtonRectangle
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="返回设置参数"
-                android:id="@+id/button8"/>
-
-            <com.gc.materialdesign.views.ButtonRectangle
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="进入指令测试"
-                android:id="@+id/enterTestOrder"/>
-        </RelativeLayout>
-
-    </LinearLayout>
+    </com.gc.materialdesign.views.ScrollView>
 
 </LinearLayout>

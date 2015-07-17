@@ -4,4 +4,99 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+
+    <android.support.v7.widget.Toolbar
+        android:minHeight="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_blue">
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <com.gc.materialdesign.views.ScrollView
+        android:layout_weight="0.7"
+        android:layout_below="@+id/toolbar"
+        android:id="@+id/scrollall"
+        android:clickable="false"
+        android:layout_width="fill_parent"
+        android:layout_height="300dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <com.gc.materialdesign.views.ScrollView
+                android:layout_weight="0.7"
+                android:layout_below="@+id/toolbar"
+                android:id="@+id/scroll"
+                android:clickable="false"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="内容"
+                        android:id="@+id/textView7"/>
+
+                </LinearLayout>
+
+            </com.gc.materialdesign.views.ScrollView>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="4px"
+                android:background="@color/divid_color"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="指令"
+                android:id="@+id/textView15"/>
+
+            <EditText
+                android:minLines="3"
+                android:maxLines="3"
+                android:gravity="top"
+                android:layout_weight="0.3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editText"/>
+
+            <RelativeLayout
+                android:layout_weight="0.1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.gc.materialdesign.views.ButtonRectangle
+                    android:background="@color/primary_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="返回"
+                    android:id="@+id/button8"/>
+
+                <com.gc.materialdesign.views.ButtonRectangle
+                    android:background="@color/primary_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发送指令"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/button9"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </com.gc.materialdesign.views.ScrollView>
+
 </LinearLayout>

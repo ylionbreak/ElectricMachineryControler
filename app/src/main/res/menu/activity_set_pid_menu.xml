@@ -15,11 +15,12 @@
           android:orderInCategory="80"
           app:showAsAction="never" />
 
-    <item android:id="@+id/next_icon"
-          android:title=""
-          android:icon="@drawable/next_pid"
+    <item android:id="@+id/home"
+          android:title="说明文档"
+          android:icon="@drawable/ic_home_white_48dp"
           android:orderInCategory="70"
           app:showAsAction="always" />
+
 
 
 </menu>
