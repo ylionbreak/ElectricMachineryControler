@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+              xmlns:material="http://schemas.android.com/apk/res-auto"
               xmlns:app="http://schemas.android.com/tools"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -11,8 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/dark_blue">
-
     </android.support.v7.widget.Toolbar>
+
+
 
     <com.gc.materialdesign.views.ScrollView
         android:layout_below="@+id/toolbar"
@@ -30,6 +34,12 @@
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="250dp">
+
+                <hzl.electricmachinerycontroler.MyBitmapView
+                    android:id="@+id/linePic"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -44,11 +54,13 @@
                     android:text="P:"
                     android:id="@+id/textView17"/>
 
-                <EditText
+                <MaterialEditText
+                    android:textSize="16sp"
                     android:layout_weight="1"
                     android:layout_width="80dp"
+                    android:layout_margin="5dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText2"/>
+                    android:id="@+id/PEdit"/>
 
                 <TextView
                     android:layout_weight="1"
@@ -57,11 +69,13 @@
                     android:text="I:"
                     android:id="@+id/textView18"/>
 
-                <EditText
+                <MaterialEditText
+                    android:textSize="16sp"
                     android:layout_weight="1"
                     android:layout_width="80dp"
+                    android:layout_margin="5dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText3"/>
+                    android:id="@+id/IEdit"/>
 
                 <TextView
                     android:layout_weight="1"
@@ -70,11 +84,13 @@
                     android:text="D:"
                     android:id="@+id/textView19"/>
 
-                <EditText
+                <MaterialEditText
+                    android:textSize="16sp"
                     android:layout_weight="1"
                     android:layout_width="80dp"
+                    android:layout_margin="5dp"
                     android:layout_height="wrap_content"
-                    android:id="@+id/editText4"/>
+                    android:id="@+id/DEdit"/>
 
             </LinearLayout>
 
@@ -115,23 +131,31 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent">
 
-                    <EditText
+                    <MaterialEditText
+                        android:textSize="16sp"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/editText6"/>
+                        android:id="@+id/par1Edit"/>
 
-                    <EditText
+                    <MaterialEditText
+                        android:text="0"
+                        android:layout_margin="5dp"
+                        android:textSize="16sp"
                         android:layout_weight="1"
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/editText7"/>
+                        android:id="@+id/par2Edit"/>
 
-                    <EditText
+                    <MaterialEditText
+                        android:text="0"
+                        android:layout_margin="5dp"
+                        android:textSize="16sp"
                         android:layout_weight="1"
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:id="@+id/editText5"/>
+                        android:id="@+id/par3Edit"/>
                 </LinearLayout>
 
                 <com.gc.materialdesign.views.Slider
@@ -139,7 +163,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="#1E88E5"
-                    materialdesign:max="100"
+                    materialdesign:max="0"
                     materialdesign:min="0"
                     materialdesign:showNumberIndicator="true"/>
 
@@ -149,15 +173,23 @@
                     android:layout_height="48dp">
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:text="取反"
+                        android:id="@+id/changeOpsi"
+                        android:background="@color/primary_blue"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:text="归零"
+                        android:id="@+id/backZero"
+                        android:background="@color/primary_blue"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:text="发送"
+                        android:id="@+id/send"
+                        android:background="@color/primary_blue"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:text="暂停"
+                        android:id="@+id/pause"
+                        android:background="@color/primary_blue"
                         style="@style/testCircleButton"/>
 
                 </LinearLayout>
@@ -169,22 +201,27 @@
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="-1%"
+                        android:id="@+id/f1"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="-5%"
+                        android:id="@+id/f5"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="-10%"
+                        android:id="@+id/f10"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="-50%"
+                        android:id="@+id/f50"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="-100%"
+                        android:id="@+id/f100"
                         style="@style/testCircleButton"/>
                 </LinearLayout>
 
@@ -195,22 +232,27 @@
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="+1%"
+                        android:id="@+id/z1"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="+5%"
+                        android:id="@+id/z5"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="+10%"
+                        android:id="@+id/z10"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="+50%"
+                        android:id="@+id/z50"
                         style="@style/testCircleButton"/>
                     <com.gc.materialdesign.views.ButtonRectangle
                         android:background="@color/primary_blue"
                         android:text="+100%"
+                        android:id="@+id/z100"
                         style="@style/testCircleButton"/>
                 </LinearLayout>
 

@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.gc.materialdesign.views.ButtonFlat;
 import com.gc.materialdesign.views.ButtonRectangle;
@@ -45,15 +48,36 @@ public class MainActivity extends ActionBarActivity {
 	ButtonRectangle testPCircle;
 	ButtonRectangle aboutQudong;
 	ButtonFlat connectBtn;
-	BluetoothSPP bt;
+	static BluetoothSPP bt;
 	String macAdd;
+	Toast errorToast;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		bt = new BluetoothSPP(this);
 		super.onCreate(savedInstanceState);
 		Log.e("ParameterConfigureActivity", "onCreate");
 		setContentView(R.layout.main_layout);
-		//initBlueTooth();
+		errorToast=Toast.makeText(this,"",Toast.LENGTH_LONG);
+		initBlueTooth();
 		initToolBar();
+		bt.setBluetoothConnectionListener(new BluetoothSPP.BluetoothConnectionListener() {
+			@Override
+			public void onDeviceConnected(String s, String s2) {
+				Message message = new Message();
+				message.what = 12345;
+				myHandler.sendMessage(message);
+			}
+			@Override
+			public void onDeviceDisconnected() {
+
+			}
+			@Override
+			public void onDeviceConnectionFailed() {
+				Message message = new Message();
+				message.what = 54321;
+				myHandler.sendMessage(message);
+			}
+		});
 		connectBtn=(ButtonFlat)findViewById(R.id.connect);
 		quDongSet=(ButtonRectangle)findViewById(R.id.quDongSet);
 		testOrder=(ButtonRectangle)findViewById(R.id.testOrder);
@@ -71,10 +95,16 @@ public class MainActivity extends ActionBarActivity {
 	}
 
 	private void initBlueTooth(){
-		bt = new BluetoothSPP(MainActivity.this);
-		bt.setupService();
-		bt.enable();
-		bt.startService(BluetoothState.DEVICE_OTHER);
+		try {
+			bt = new BluetoothSPP(MainActivity.this);
+			bt.setupService();
+			bt.enable();
+			bt.startService(BluetoothState.DEVICE_OTHER);
+		}catch (Exception e){
+			errorToast.setText("蓝牙异常或未开启");
+			errorToast.show();
+			e.printStackTrace();
+		}
 	}
 
 	private void initToolBar(){
@@ -112,10 +142,14 @@ public class MainActivity extends ActionBarActivity {
 				Thread connectThread = new Thread(new Runnable() {
 					@Override
 					public void run() {
+						Message message = new Message();
+						message.what = 11111;
+						myHandler.sendMessage(message);
 						bt.connect(macAdd);
 					}
 				});
 				connectThread.start();
+
 			}
 		} else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
 			if(resultCode == Activity.RESULT_OK) {
@@ -157,4 +191,30 @@ public class MainActivity extends ActionBarActivity {
 			startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
 		}
 	};
+
+	Handler myHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+				case 12345:
+					errorToast.setText("蓝牙连接成功");
+					errorToast.show();
+					break;
+				case 54321:
+					errorToast.setText("蓝牙连接失败");
+					errorToast.show();
+					break;
+				case 11111:
+					errorToast.setText("连接中");
+					errorToast.show();
+					break;
+			}
+			super.handleMessage(msg);
+		}
+	};
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		android.os.Process.killProcess(android.os.Process.myPid());
+	}
 }

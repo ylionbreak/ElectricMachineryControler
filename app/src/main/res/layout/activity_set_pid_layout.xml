@@ -5,6 +5,8 @@
               xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
               android:background="@color/white"
               tools:context=".SetPID"
+              android:focusable="true"
+              android:focusableInTouchMode="true"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
@@ -40,7 +42,7 @@
                         android:layout_weight="1"
                         android:layout_height="40dp"
                         android:text="速度环"
-                        android:id="@+id/button10"/>
+                        android:id="@+id/speedCircle"/>
                     <View
                         android:layout_width="3px"
                         android:layout_height="40dp"
@@ -52,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:text="电流环"
-                        android:id="@+id/button11"/>
+                        android:id="@+id/currentCircle"/>
                     <View
                         android:layout_width="3px"
                         android:layout_height="40dp"
@@ -64,7 +66,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:text="位置环"
-                        android:id="@+id/button12"/>
+                        android:id="@+id/locationCircle"/>
                 </LinearLayout>
 
                 <View
@@ -73,6 +75,19 @@
                     android:background="@color/primary_blue"
                     />
 
+                <hzl.electricmachinerycontroler.MyBitmapView
+                    android:id="@+id/linePic"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    />
+
+                <com.gc.materialdesign.views.ProgressBarIndeterminate
+                    android:layout_margin="50dp"
+                    android:visibility="gone"
+                    android:id="@+id/progressBarIndeterminate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#1E88E5" />
             </LinearLayout>
 
             <LinearLayout
@@ -94,7 +109,7 @@
                     <TextView
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:text=" "
+                        android:text="0"
                         android:id="@+id/textView12"/>
 
                     <TextView
@@ -106,7 +121,7 @@
                     <TextView
                         android:layout_width="80dp"
                         android:layout_height="wrap_content"
-                        android:text=" "
+                        android:text="0"
                         android:id="@+id/textView14"/>
 
                     <TextView
@@ -115,7 +130,7 @@
                         android:text="幅值:"
                         android:id="@+id/fuZhiText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:text=""
@@ -139,7 +154,7 @@
                         android:text="P:"
                         android:id="@+id/IPText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/IPEdit"/>
@@ -150,7 +165,7 @@
                         android:text="I:"
                         android:id="@+id/IIText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/IIEdit"/>
@@ -161,7 +176,7 @@
                         android:text="D:"
                         android:id="@+id/IDText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/IDEdit"/>
@@ -184,7 +199,7 @@
                         android:text="P:"
                         android:id="@+id/VPText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/VPEdit"/>
@@ -195,7 +210,7 @@
                         android:text="I:"
                         android:id="@+id/VIText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/VIEdit"/>
@@ -206,7 +221,7 @@
                         android:text="D:"
                         android:id="@+id/VDText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/VDEdit"/>
@@ -229,7 +244,7 @@
                         android:text="P:"
                         android:id="@+id/PPText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/PPEdit"/>
@@ -240,7 +255,7 @@
                         android:text="I:"
                         android:id="@+id/PIText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/PIEdit"/>
@@ -251,7 +266,7 @@
                         android:text="D:"
                         android:id="@+id/PDText"/>
 
-                    <EditText
+                    <MaterialEditText
                         android:layout_width="85dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/PDEdit"/>
@@ -269,7 +284,7 @@
                         android:layout_height="wrap_content"
                         android:text="自整定"
                         android:layout_alignParentLeft="true"
-                        android:id="@+id/button5"
+                        android:id="@+id/selfTunning"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"/>
 
@@ -279,7 +294,7 @@
                         android:layout_height="wrap_content"
                         android:text="测试"
                         android:layout_alignParentRight="true"
-                        android:id="@+id/button6"
+                        android:id="@+id/test"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"/>
 
