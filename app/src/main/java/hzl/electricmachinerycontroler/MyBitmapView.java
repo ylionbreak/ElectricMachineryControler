@@ -64,14 +64,6 @@ public class MyBitmapView extends View {
 		myBitmap.eraseColor(Color.WHITE);
 		//drawLines();
 	}
-	public MyBitmapView(Context context, AttributeSet attrs, int defStyleAttr,float[] linePointNative1,float[] linePointNative2) {
-		super(context, attrs, defStyleAttr);
-		myBitmap=Bitmap.createBitmap(1000,500,Bitmap.Config.ARGB_4444);
-		this.linePointNative1=linePointNative1;
-		this.linePointNative2=linePointNative2;
-		drawLines();
-	}
-
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		int w=measure(widthMeasureSpec);
@@ -117,9 +109,9 @@ public class MyBitmapView extends View {
 			mPts2 = new float[20];
 			for (int i = 0; i < 10; i++) {
 				mPts1[i * 2] = xi + 8f;
-				mPts1[i * 2 + 1] = (linePointNative1[i]-10)*3;
+				mPts1[i * 2 + 1] = (linePointNative1[i])/2;
 				mPts2[i * 2] = xi+ 8f;
-				mPts2[i * 2 + 1] = (linePointNative2[i]-10)*3;
+				mPts2[i * 2 + 1] = (linePointNative2[i])/2;
 				xi=xi+8;
 				num++;
 			}
@@ -127,9 +119,7 @@ public class MyBitmapView extends View {
 			connectPoints1[3]=mPts1[1];
 			connectPoints2[2]=mPts2[0];
 			connectPoints2[3]=mPts2[1];
-
 		}
-
 	}
 	public void drawLines(){
 		buildPoints();
@@ -137,24 +127,24 @@ public class MyBitmapView extends View {
 		canvas.translate(10,80);
 		canvas.drawColor(Color.TRANSPARENT);
 		Paint paint=new Paint();
+		//画点
+		paint.setColor(Color.BLACK);
+		paint.setStrokeWidth(2);
+		canvas.drawPoints(mPts1,paint);
 		//画线1
 		paint.setColor(Color.BLACK);
 		paint.setStrokeWidth(2);
 		canvas.drawLines(mPts1, 0, mPts1.length, paint);
 		canvas.drawLines(mPts1, 2, mPts1.length-2, paint);
 		//画点
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.RED);
 		paint.setStrokeWidth(2);
-		canvas.drawPoints(mPts1,paint);
+		canvas.drawPoints(mPts2,paint);
 		//画线2
 		paint.setColor(Color.RED);
 		paint.setStrokeWidth(2);
 		canvas.drawLines(mPts2, 0, mPts2.length, paint);
 		canvas.drawLines(mPts2, 2, mPts2.length-2, paint);
-		//画点
-		paint.setColor(Color.RED);
-		paint.setStrokeWidth(2);
-		canvas.drawPoints(mPts2,paint);
 		if(num>15){
 			//画线1
 			paint.setColor(Color.BLACK);
@@ -177,7 +167,6 @@ public class MyBitmapView extends View {
 		connectPoints1[1]=mPts1[19];
 		connectPoints2[0]=mPts2[18];
 		connectPoints2[1]=mPts2[19];
-		//Log.e("num", String.valueOf(num) );
 		if(num>100) {
 			myBitmap.eraseColor(Color.WHITE);
 			xi=0;

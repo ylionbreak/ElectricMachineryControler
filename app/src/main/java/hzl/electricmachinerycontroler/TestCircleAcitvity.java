@@ -23,6 +23,7 @@ import com.gc.materialdesign.views.Slider;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Timer;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -60,6 +61,8 @@ public class TestCircleAcitvity extends ActionBarActivity {
 	ButtonRectangle backZero;
 	ButtonRectangle send;
 	ButtonRectangle pause;
+	Timer timer;
+
 	boolean sendingFlag=false;
 	float[] point1=new float[10];
 	int pointPointer1=0;
@@ -73,7 +76,7 @@ public class TestCircleAcitvity extends ActionBarActivity {
 	Thread lisThread = new Thread(new Runnable() {
 		@Override
 		public void run() {
-			listenForMessages(MainActivity.bluetoothManager.getTransferSocket());
+				listenForMessages(MainActivity.bluetoothManager.getTransferSocket());
 		}
 	});
 	Handler myHandler = new Handler() {
@@ -81,13 +84,9 @@ public class TestCircleAcitvity extends ActionBarActivity {
 			switch (msg.what) {
 				case 12345:
 					Bundle bundle=msg.getData();
-					byte[] bytes = bundle.getByteArray("byte");
+					byte[] bytes=bundle.getByteArray("bytes");
 					try {
-						for(int i=0;i<8;i++){
-							bytes[i]=(byte)(bytes[i]&0xff);
-							//bytes[i]=(byte)Math.abs(bytes[i]);
-						}
-						if(bytes[0]=='g'&&bytes[1]=='j'&& (byte)( (bytes[0]+bytes[1]+bytes[2]+bytes[3]+bytes[4]+bytes[5]+bytes[6])&0xff )==bytes[7]){
+						if(bytes[0]=='g'&&bytes[1]=='j'){
 							if(bytes[2]==0||bytes[2]==3||bytes[2]==6){
 								PEdit.setText( String.valueOf( (bytes[3]*256+bytes[4])/100.0) );
 							}else if(bytes[2]==1||bytes[2]==4||bytes[2]==7){
@@ -99,7 +98,7 @@ public class TestCircleAcitvity extends ActionBarActivity {
 							if(bytes[2]==0||bytes[2]==1) {
 								if(pointPointer1==10) {
 									pointPointer1 = 0;
-									//linePic.setPoints1(point1);
+									linePic.setPoints1(point1);
 								}
 								point1[pointPointer1] = (bytes[5] * 256 + Math.abs(bytes[6]) );
 								pointPointer1++;
@@ -107,30 +106,40 @@ public class TestCircleAcitvity extends ActionBarActivity {
 							else if(bytes[2]==3||bytes[2]==4) {
 								if(pointPointer2==10) {
 									pointPointer2 = 0;
-									//linePic.setPoints2(point2);
+									linePic.setPoints2(point2);
 								}
 								point2[pointPointer2] = (bytes[5] * 256 + Math.abs(bytes[6]) );
 								pointPointer2++;
 							}
-						}else if(bytes[0]=='r'&&bytes[1]=='c'&& (byte)((bytes[0]+bytes[1]+bytes[2]+bytes[3]+bytes[4]+bytes[5]+bytes[6])&0xff )== bytes[7]  ){
-							ii++;
+						}else if(bytes[0]=='r'&&bytes[1]=='c'&& (byte)((bytes[0]+bytes[1]+bytes[2]+bytes[3]+bytes[4]+bytes[5]+bytes[6]) )== bytes[7]  ){
+
 							if(bytes[2]==0) {
+								//Log.e("0",Integer.toHexString(bytes[5]));
+								//Log.e("0",Integer.toHexString(bytes[6]));
+								point1[pointPointer1] = (bytes[5] * 256 + Math.abs(bytes[6]))/100f;
+								pointPointer1++;
 								if(pointPointer1==10) {
 									pointPointer1 = 0;
-									//linePic.setPoints1(point1);
+									linePic.setPoints1(point1);
 								}
-								point1[pointPointer1] = (bytes[5] * 256 + Math.abs(bytes[6]))/100f;
-								//Log.e("set1",String.valueOf(point1[pointPointer1]));
-								pointPointer1++;
+
 							}
 							else if(bytes[2]==1) {
-								if(pointPointer2==10) {
-									pointPointer2 = 0;
-									//linePic.setPoints2(point2);
-								}
+								//Log.e("1",Integer.toHexString(bytes[5]));
+								//Log.e("1",Integer.toHexString(bytes[6]));
 								point2[pointPointer2] =(bytes[5] * 256 + Math.abs(bytes[6]))/100f;
 								pointPointer2++;
+								if(pointPointer2==10) {
+									pointPointer2 = 0;
+									linePic.setPoints2(point2);
+								}
+
 							}
+						}
+						for(int i=5;i<7;i++){
+							//Log.e("----"+String.valueOf(i),Integer.toHexString(bytes[i]));
+							//=(byte)(bytes[i]&0xff);
+							//bytes[i]=(byte)Math.abs(bytes[i]);
 						}
 //				for(int i=8;i<12;i++){
 //					Log.e("error!!!!!!!",String.valueOf(0xff&bytes[i]) );
@@ -153,6 +162,7 @@ public class TestCircleAcitvity extends ActionBarActivity {
 						}
 						e.printStackTrace();
 					}
+					break;
 			}
 			super.handleMessage(msg);
 		}
@@ -181,6 +191,11 @@ public class TestCircleAcitvity extends ActionBarActivity {
 		initEditText();
 		initUI();
 		linePic =(MyBitmapView)findViewById(R.id.linePic);
+		//lisThread.start();
+		timer = new Timer(true);
+		timer.schedule(new java.util.TimerTask() { public void run(){
+			listenForMessages(MainActivity.bluetoothManager.getTransferSocket()); }
+		}, 0, 20);
 	}
 	private void initTextView(int type){
 		par1=(TextView)findViewById(R.id.par1);
@@ -209,7 +224,7 @@ public class TestCircleAcitvity extends ActionBarActivity {
 			}
 			MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<1000;i++);
+			for(int i=0;i<2000;i++);
 			sendByte[7]=0;
 			sendByte[2]=7;
 			for(int i=0;i<7;i++){
@@ -217,7 +232,7 @@ public class TestCircleAcitvity extends ActionBarActivity {
 			}
 			MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<1000;i++);
+			for(int i=0;i<2000;i++);
 			sendByte[7]=0;
 			sendByte[2]=8;
 			for(int i=0;i<7;i++){
@@ -696,24 +711,35 @@ public class TestCircleAcitvity extends ActionBarActivity {
 
 	private void listenForMessages(BluetoothSocket socket){
 		listening = true;
-		int bufferSize =20;
-		byte[] buffer = new byte[bufferSize];
+
+		Message message;
 		int pointer=0;
 		try {
 			InputStream inputStream = socket.getInputStream();
-			while (listening){
-				buffer[pointer]=(byte)inputStream.read();
-				pointer++;
-				if(buffer[pointer]==0x0a||pointer==9){
-					pointer=0;
-					Message message=new Message();
-					message.what=12345;
-					Bundle bundle=new Bundle();
-					bundle.putByteArray("bytes",buffer);
-					message.setData(bundle);
-					myHandler.sendMessage(message);
+			//while (listening){
+//				this.wait(100L);
+				int bufferSize = 10;
+				byte[] bytes = new byte[bufferSize];
+
+//				bytes[pointer]=(byte)inputStream.read();
+//				Log.e("get",Integer.toHexString(bytes[pointer]));
+//				pointer++;
+				//if(pointer==7){
+//					pointer=0;
+
+				int length = inputStream.read(bytes,0,10);
+				while(length!=10){
+					length=length+inputStream.read(bytes,length,10-length);
 				}
-			}
+				message=new Message();
+				message.what=12345;
+				Bundle bundle=new Bundle();
+				bundle.putByteArray("bytes",bytes);
+				message.setData(bundle);
+				myHandler.sendMessage(message);
+
+
+			//}
 
 		}catch (IOException e){
 			e.printStackTrace();
