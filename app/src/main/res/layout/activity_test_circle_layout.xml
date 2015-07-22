@@ -3,6 +3,7 @@
               xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
               xmlns:material="http://schemas.android.com/apk/res-auto"
               xmlns:app="http://schemas.android.com/tools"
+              android:background="@color/white"
               android:focusable="true"
               android:focusableInTouchMode="true"
               android:orientation="vertical"
@@ -32,14 +33,12 @@
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="250dp">
-
-                <hzl.electricmachinerycontroler.MyBitmapView
-                    android:id="@+id/linePic"
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    />
+                android:layout_width="1000dp"
+                android:layout_height="200dp">
+                    <hzl.electricmachinerycontroler.MyBitmapView
+                        android:id="@+id/linePic"
+                        android:layout_width="1000dp"
+                        android:layout_height="200dp"/>
             </LinearLayout>
 
             <LinearLayout

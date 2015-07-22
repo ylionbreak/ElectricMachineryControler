@@ -134,7 +134,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-        <com.gc.materialdesign.views.ButtonFlat
+        <com.gc.materialdesign.views.ButtonRectangle
             android:layout_centerHorizontal="true"
             android:background="#03A9F4"
             android:layout_width="200dp"

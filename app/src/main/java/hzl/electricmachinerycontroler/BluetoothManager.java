@@ -31,44 +31,17 @@ public class BluetoothManager {
 		}
 	}
 
-	public void sendMessage(String message){
+	public void send(byte[] bytes){
 		OutputStream outputStream;
 		try {
 			outputStream = transferSocket.getOutputStream();
-			byte[] bytes = (message).getBytes();
 			outputStream.write(bytes);
 		}catch (IOException e){
 			e.printStackTrace();
 		}
 	}
 
-	private void listenForMessages(BluetoothSocket socket){
-		listening = true;
-		int bufferSize =1024;
-		byte[] buffer = new byte[bufferSize];
-		try {
-			InputStream inputStream = socket.getInputStream();
-			int bytesRead ;
 
-			while (listening){
-				bytesRead = inputStream.read(buffer);
-				String result = "";
-				if(bytesRead != -1){
-
-					while(bytesRead == bufferSize && buffer[bufferSize-1] != 0){
-						result = result + new String(buffer,0,bytesRead);
-						bytesRead = inputStream.read(buffer);
-					}
-					result = result + new String(buffer,0,bytesRead);
-				}
-				listening=false;
-				returnMessage=result;
-			}
-
-		}catch (IOException e){
-			e.printStackTrace();
-		}
-	}
 
 
 	public BluetoothSocket getTransferSocket() {

@@ -2,12 +2,14 @@ package hzl.electricmachinerycontroler;
 
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,9 +48,9 @@ public class SetPIDActivity extends ActionBarActivity {
 	int testSta=1;
 	Toast toast;
 	MyBitmapView linePic;
-	float[] point1=new float[5000];
+	float[] point1=new float[10];
 	int pointPointer1=0;
-	float[] point2=new float[5000];
+	float[] point2=new float[10];
 	int pointPointer2=0;
 	private BluetoothSPP.OnDataReceivedListener ParActivityDataRecier = new BluetoothSPP.OnDataReceivedListener() {
 		@Override
@@ -86,7 +88,7 @@ public class SetPIDActivity extends ActionBarActivity {
 					}
 				}else if(bytes[0]=='g'&&bytes[1]=='j'){
 					if(bytes[2]==0||bytes[2]==1) {
-						if(pointPointer1==5000) {
+						if(pointPointer1==10) {
 							pointPointer1 = 0;
 							linePic.setPoints1(point1);
 						}
@@ -94,7 +96,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						pointPointer1++;
 					}
 					else if(bytes[2]==3||bytes[2]==4) {
-						if(pointPointer2==5000) {
+						if(pointPointer2==10) {
 							pointPointer2 = 0;
 							linePic.setPoints2(point2);
 						}
@@ -103,7 +105,7 @@ public class SetPIDActivity extends ActionBarActivity {
 					}
 				}else if(bytes[0]=='r'&&bytes[1]=='c'){
 					if(bytes[2]==0) {
-						if(pointPointer1==5000) {
+						if(pointPointer1==10) {
 							pointPointer1 = 0;
 							linePic.setPoints1(point1);
 						}
@@ -111,7 +113,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						pointPointer1++;
 					}
 					else if(bytes[2]==1) {
-						if(pointPointer2==5000) {
+						if(pointPointer2==10) {
 							pointPointer2 = 0;
 							linePic.setPoints2(point2);
 						}
@@ -151,6 +153,7 @@ public class SetPIDActivity extends ActionBarActivity {
 			public void onClick(View v) {
 				Intent intent=new Intent(SetPIDActivity.this,ParameterConfigureActivity.class);  //方法1
 				startActivity(intent);
+				finish();
 			}
 		});
 		toolbar.setOnMenuItemClickListener(onMenuItemClick);
@@ -360,15 +363,23 @@ public class SetPIDActivity extends ActionBarActivity {
 				case R.id.home:
 					Intent intent=new Intent(SetPIDActivity.this,MainActivity.class);  //方法1
 					startActivity(intent);
+					finish();
 					break;
-
 			}
-
 			if(!msg.equals("")) {
 				Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
 			}
 			return true;
 		}
 	};
+
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(keyCode==KeyEvent.KEYCODE_BACK){
+			Intent intent=new Intent(SetPIDActivity.this,ParameterConfigureActivity.class);  //方法1
+			startActivity(intent);
+			finish();
+		}
+		return false;
+	}
 }
 

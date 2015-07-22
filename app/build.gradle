@@ -23,7 +23,7 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile ('com.github.ganfra:material-spinner:1.1.0'){
+    compile('com.github.ganfra:material-spinner:1.1.0') {
         exclude group: 'com.nineoldandroids', module: 'library'
         exclude group: 'com.android.support', module: 'appcompat-v7'
     }
@@ -33,4 +33,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.specyci:residemenu:1.6+'
     compile 'fr.erictruong:materialedittext:0.2.0'
+    compile files('F:/AndroidProject/ElectricMachineryControler/libs/BmobSDK_V3.4.1_0710.jar')
+    compile files('F:/AndroidProject/ElectricMachineryControler/libs/Bmob_Push_V0.6beta_20150408.jar')
 }

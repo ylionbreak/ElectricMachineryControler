@@ -88,9 +88,11 @@
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="material-spinner-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="Bmob_Push_V0.6beta_20150408" level="project" />
     <orderEntry type="library" exported="" name="residemenu-1.6" level="project" />
     <orderEntry type="library" exported="" name="materialedittext-0.2.0" level="project" />
     <orderEntry type="library" exported="" name="MaterialDesign-1.4" level="project" />
+    <orderEntry type="library" exported="" name="BmobSDK_V3.4.1_0710" level="project" />
   </component>
 </module>
 

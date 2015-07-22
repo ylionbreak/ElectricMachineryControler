@@ -4,10 +4,13 @@ package hzl.electricmachinerycontroler;
 
 import com.gc.materialdesign.views.ButtonRectangle;
 import com.gc.materialdesign.views.ScrollView;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -53,7 +56,12 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 		@Override
 		public void onDataReceived(byte[] bytes, String s) {
 			try {
-
+//				toast.setText("指令为:"+bytes[0]+bytes[1]+bytes[2]+bytes[3]+bytes[4]+bytes[5]+bytes[6]+bytes[7]);
+//				toast.show();
+				Log.e("hex",String.valueOf((char)bytes[0])+" "+String.valueOf((char)bytes[1])+
+						" "+Integer.toHexString(bytes[2])+" "+Integer.toHexString(bytes[3])+
+						" "+Integer.toHexString(bytes[4])+" "+Integer.toHexString(bytes[5])+
+						" "+Integer.toHexString(bytes[6])+" "+Integer.toHexString(bytes[7]));
 				//获取CAN配置：GN(Get Can )
 				if(bytes[0]=='g'&&bytes[1]=='n'){
 					if(bytes[4]==1){
@@ -73,17 +81,17 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 				}
 				//读取减速比：GL(Get scaLe)
 				if(bytes[0]=='g'&&bytes[1]=='l'){
-					jianSuBiEditText.setText(String.valueOf(bytes[2]*256+bytes[3]));
+					jianSuBiEditText.setText(String.valueOf((bytes[2]*256+bytes[3])/100f));
 				}
 				//读取电机电压：GP(Get Voltage)
 				if(bytes[0]=='g'&&bytes[1]=='p'){
-					eDingDianYaEditText.setText(String.valueOf( (bytes[3]*256+bytes[4])/10 ));
-					fengZhiDianYaEditText.setText(String.valueOf( (bytes[5]*256+bytes[6])/10 ));
+					eDingDianYaEditText.setText(String.valueOf( (bytes[3]*256+bytes[4])/10f ));
+					fengZhiDianYaEditText.setText(String.valueOf( (bytes[5]*256+bytes[6])/10f ));
 				}
 				//读取电机电流：GC(Get Current)
 				if(bytes[0]=='g'&&bytes[1]=='c'){
-					eDingDianLiuEditText.setText(String.valueOf( (bytes[3]*256+bytes[4])/100 ));
-					fengZhiDianLiuEditText.setText(String.valueOf( (bytes[5]*256+bytes[6])/100 ));
+					eDingDianLiuEditText.setText(String.valueOf( (bytes[3]*256+bytes[4])/100f ));
+					fengZhiDianLiuEditText.setText(String.valueOf( (bytes[5]*256+bytes[6])/100f ));
 				}
 				//读取 SD(Set speeD)
 				if(bytes[0]=='g'&&bytes[1]=='c'){
@@ -104,6 +112,7 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.e("rec","rec");
 		setContentView(R.layout.activity_parameter_configure_layout);
 		toast=Toast.makeText(this,"异常",Toast.LENGTH_LONG);
 		try{
@@ -159,7 +168,7 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if (!hasFocus) {
 					try {
-						int num=Integer.valueOf(jianSuBiEditText.getText().toString())*100;
+						int num=(int)(Float.valueOf(jianSuBiEditText.getText().toString())*100);
 						byte[] sendByte = new byte[]{'S', 'L', (byte)(num>>8), (byte)(num), 0x00, 0x00, 0x00, 0x00};
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
@@ -178,7 +187,7 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus) {
 					try {
-						int num=Integer.valueOf(eDingDianYaEditText.getText().toString())*10;
+						int num= (int)(Float.valueOf(eDingDianYaEditText.getText().toString()) *10);
 						byte[] sendByte = new byte[]{'S', 'P', 0x00, (byte)(num>>8), (byte)(num), 0x00, 0x00, 0x00};
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
@@ -197,7 +206,7 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus) {
 					try {
-						int num=Integer.valueOf(fengZhiDianYaEditText.getText().toString())*10;
+						int num= (int)(Float.valueOf(fengZhiDianYaEditText.getText().toString()) *10);
 						byte[] sendByte = new byte[]{'S', 'P', 0x01, (byte)(num>>8), (byte)(num), 0x00, 0x00, 0x00};
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
@@ -216,7 +225,7 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus) {
 					try {
-						int num=Integer.valueOf(eDingDianLiuEditText.getText().toString())*100;
+						int num = (int)(Float.valueOf(eDingDianLiuEditText.getText().toString()) *100);
 						byte[] sendByte = new byte[]{'S', 'C', 0x00, (byte)(num>>8), (byte)(num), 0x00, 0x00, 0x00};
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
@@ -235,7 +244,7 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus) {
 					try {
-						int num=Integer.valueOf(fengZhiDianLiuEditText.getText().toString())*100;
+						int num= (int)(Float.valueOf(fengZhiDianLiuEditText.getText().toString()) *100);
 						byte[] sendByte = new byte[]{'S', 'C', 0x01, (byte)(num>>8), (byte)(num), 0x00, 0x00, 0x00};
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
@@ -274,7 +283,7 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 			public void onFocusChange(View v, boolean hasFocus) {
 				if(!hasFocus) {
 					try {
-						int num=Integer.valueOf(zuiDaJiaSuDuEditText.getText().toString())*100;
+						int num= (int)( Float.valueOf(zuiDaJiaSuDuEditText.getText().toString())*100 );
 						byte[] sendByte = new byte[]{'S', 'A',(byte)(num>>8), (byte)(num), 0x00, 0x00, 0x00, 0x00};
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
@@ -308,7 +317,6 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 						toast.setText("蓝牙无连接");
 						toast.show();
 					}
-
 				}
 			}
 		});
@@ -380,8 +388,9 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent=new Intent(ParameterConfigureActivity.this,MainActivity.class);  //方法1
-				startActivity(intent);
+//				Intent intent=new Intent(ParameterConfigureActivity.this,MainActivity.class);  //方法1
+//				startActivity(intent);
+				finish();
 			}
 		});
 		toolbar.setOnMenuItemClickListener(onMenuItemClick);
@@ -408,42 +417,29 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 		tryDir.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				try {
+					byte[] sendByte = new byte[]{'S', 'D', 0x02, 0x00, 0x00, 0x00, 0x00, 0x00};
+					for(int i=0;i<7;i++){
+						sendByte[7]+=sendByte[i];
+					}
+					MainActivity.bt.send(sendByte, false);
+				} catch (Exception e) {
+					e.printStackTrace();
+					toast.setText("蓝牙无连接");
+					toast.show();
+				}
 			}
 		});
 	}
 	private void initUI(){
 		try {
 			byte[] sendByte;
-			sendByte = new byte[] {'G','N',0x00,0x00,0x00,0x00,0x00,(byte)('G'+'N')};
+			sendByte = new byte[] {'L','P',0x00,0x00,0x00,0x00,0x00,0x00};
 			for(int i=0;i<7;i++){
 				sendByte[7]+=sendByte[i];
 			}
 			MainActivity.bt.send(sendByte,false);
-			sendByte[1]='P';
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
-			MainActivity.bt.send(sendByte,false);
-			sendByte[1]='C';
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
-			MainActivity.bt.send(sendByte,false);
-			sendByte[1]='A';
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
-			MainActivity.bt.send(sendByte,false);
-			sendByte[1]='E';
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
-			MainActivity.bt.send(sendByte,false);
-			sendByte[1]='L';
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
+			for(int i=0;i<2000;i++);
 			MainActivity.bt.send(sendByte,false);
 		}catch (Exception e){
 			e.printStackTrace();
@@ -467,23 +463,20 @@ public class ParameterConfigureActivity extends ActionBarActivity {
 				case R.id.next_icon:
 					Intent intent=new Intent(ParameterConfigureActivity.this,SetPIDActivity.class);  //方法1
 					startActivity(intent);
+					finish();
 					break;
-
 			}
 			return true;
 		}
 	};
-	Handler myHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-				case 12345:
-					changeui();
-					break;
-			}
-			super.handleMessage(msg);
-		}
-	};
-	void changeui(){
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
+	public void finish() {
+		super.finish();
 	}
 }

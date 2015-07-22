@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:background="@color/white"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <android.support.v7.widget.Toolbar
@@ -21,6 +22,9 @@
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
+
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -37,21 +41,25 @@
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
                 android:text="更新固件"
+                android:id="@+id/updataFirmware"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
                 android:text="产品手册"
+                android:id="@+id/productnNotebook"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
                 android:text="指令手册"
+                android:id="@+id/orderNotebook"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
                 android:text="购买"
+                android:id="@+id/buyProductn"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -76,20 +84,24 @@
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
                 android:text="参数列表"
+                android:id="@+id/parList"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
                 android:text="调试软件手册"
+                android:id="@+id/testSoftNotebook"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
                 android:text="常见问题"
+                android:id="@+id/qaa"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"/>
             <com.gc.materialdesign.views.ButtonRectangle
                 android:background="@color/primary_blue"
+                android:id="@+id/connectUs"
                 android:text="联系我们
                   (反馈)"
                 android:layout_width="fill_parent"
