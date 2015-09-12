@@ -26,7 +26,8 @@ public class MyBitmapView extends View {
 	boolean setTwoFlag=false;
 	boolean firstDraw=false;
 	int num=0;
-	int xi=0;
+	float xi=0;
+	final float BU_JING=8f;
 	float[] connectPoints1 = new float[4];
 	float[] connectPoints2 = new float[4];
 	@Override
@@ -108,11 +109,11 @@ public class MyBitmapView extends View {
 			mPts1 = new float[20];
 			mPts2 = new float[20];
 			for (int i = 0; i < 10; i++) {
-				mPts1[i * 2] = xi + 8f;
-				mPts1[i * 2 + 1] = (linePointNative1[i])/2;
-				mPts2[i * 2] = xi+ 8f;
-				mPts2[i * 2 + 1] = (linePointNative2[i])/2;
-				xi=xi+8;
+				mPts1[i * 2] = xi + BU_JING;
+				mPts1[i * 2 + 1] = 150-(linePointNative1[i])*2f;
+				mPts2[i * 2] = xi+ BU_JING;
+				mPts2[i * 2 + 1] = 150-(linePointNative2[i])*2f;
+				xi=xi+BU_JING;
 				num++;
 			}
 			connectPoints1[2]=mPts1[0];

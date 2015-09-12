@@ -1,5 +1,6 @@
 package hzl.electricmachinerycontroler;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,7 +70,7 @@ public class TestCircleAcitvity extends ActionBarActivity {
 	float[] point2=new float[10];
 	int pointPointer2=0;
 	int type;
-	int ii=0;
+
 	boolean listening=false;
 	MyBitmapView linePic;
 
@@ -86,15 +87,21 @@ public class TestCircleAcitvity extends ActionBarActivity {
 					Bundle bundle=msg.getData();
 					byte[] bytes=bundle.getByteArray("bytes");
 					try {
+						Log.e("hex", Integer.toHexString(0xff & bytes[2]) + " " + Integer.toHexString(0xff & bytes[3]) +
+								" " + Integer.toHexString(0xff & bytes[4]) + " " + Integer.toHexString(0xff & bytes[5]) +
+								" " + Integer.toHexString(0xff & bytes[6]));
 						if(bytes[0]=='g'&&bytes[1]=='j'){
+							Log.e("enter","enter");
 							if(bytes[2]==0||bytes[2]==3||bytes[2]==6){
-								PEdit.setText( String.valueOf( (bytes[3]*256+bytes[4])/100.0) );
-							}else if(bytes[2]==1||bytes[2]==4||bytes[2]==7){
-								IEdit.setText( String.valueOf( (bytes[3]*256+bytes[4])/100.0) );
-							}else if(bytes[2]==2||bytes[2]==5||bytes[2]==8){
-								DEdit.setText( String.valueOf( (bytes[3]*256+bytes[4])/100.0) );
+								PEdit.setText( String.valueOf( (bytes[3]*256+bytes[4])/100f) );
 							}
-						}else if(bytes[0]=='g'&&bytes[1]=='j'){
+							if(bytes[2]==1||bytes[2]==4||bytes[2]==7){
+								IEdit.setText( String.valueOf( (bytes[3]*256+bytes[4])/100f) );
+							}
+							if(bytes[2]==2||bytes[2]==5||bytes[2]==8){
+								DEdit.setText( String.valueOf( (bytes[3]*256+bytes[4])/100f) );
+							}
+						}else if(bytes[0]=='r'&&bytes[1]=='e'){
 							if(bytes[2]==0||bytes[2]==1) {
 								if(pointPointer1==10) {
 									pointPointer1 = 0;
@@ -112,21 +119,19 @@ public class TestCircleAcitvity extends ActionBarActivity {
 								pointPointer2++;
 							}
 						}else if(bytes[0]=='r'&&bytes[1]=='c'&& (byte)((bytes[0]+bytes[1]+bytes[2]+bytes[3]+bytes[4]+bytes[5]+bytes[6]) )== bytes[7]  ){
-
 							if(bytes[2]==0) {
-								//Log.e("0",Integer.toHexString(bytes[5]));
-								//Log.e("0",Integer.toHexString(bytes[6]));
 								point1[pointPointer1] = (bytes[5] * 256 + Math.abs(bytes[6]))/100f;
 								pointPointer1++;
+//								if(pointPointer1>1&&point1[pointPointer1-1]>point1[pointPointer1-2]){
+//									Log.e("hou",String.valueOf(point1[pointPointer1-1]));
+//									Log.e("qian",String.valueOf(point1[pointPointer1-2]));
+//								}
 								if(pointPointer1==10) {
 									pointPointer1 = 0;
 									linePic.setPoints1(point1);
 								}
-
 							}
 							else if(bytes[2]==1) {
-								//Log.e("1",Integer.toHexString(bytes[5]));
-								//Log.e("1",Integer.toHexString(bytes[6]));
 								point2[pointPointer2] =(bytes[5] * 256 + Math.abs(bytes[6]))/100f;
 								pointPointer2++;
 								if(pointPointer2==10) {
@@ -136,30 +141,9 @@ public class TestCircleAcitvity extends ActionBarActivity {
 
 							}
 						}
-						for(int i=5;i<7;i++){
-							//Log.e("----"+String.valueOf(i),Integer.toHexString(bytes[i]));
-							//=(byte)(bytes[i]&0xff);
-							//bytes[i]=(byte)Math.abs(bytes[i]);
-						}
-//				for(int i=8;i<12;i++){
-//					Log.e("error!!!!!!!",String.valueOf(0xff&bytes[i]) );
-//				}
-
-						//Log.e("error!!!!!!!",Integer.toHexString(0xff&bytes[8]) );
-//				Log.e("hex",String.valueOf((char)bytes[0])+" "+String.valueOf((char)bytes[1])+
-//						" "+Integer.toHexString(bytes[2])+" "+Integer.toHexString(bytes[3])+
-//						" "+Integer.toHexString(bytes[4])+" "+Integer.toHexString(bytes[5])+
-//						" "+Integer.toHexString(bytes[6])+" "+Integer.toHexString(bytes[7]));
 
 
 					}catch (Exception e){
-						try {
-							Log.e("hex", Integer.toHexString(0xff & bytes[2]) + " " + Integer.toHexString(0xff & bytes[3]) +
-									" " + Integer.toHexString(0xff & bytes[4]) + " " + Integer.toHexString(0xff & bytes[5]) +
-									" " + Integer.toHexString(0xff & bytes[6]));
-						}catch (Exception e1){
-							e.printStackTrace();
-						}
 						e.printStackTrace();
 					}
 					break;
@@ -189,13 +173,15 @@ public class TestCircleAcitvity extends ActionBarActivity {
 		initToolBar();
 		initBtn();
 		initEditText();
-		initUI();
+
 		linePic =(MyBitmapView)findViewById(R.id.linePic);
 		//lisThread.start();
 		timer = new Timer(true);
 		timer.schedule(new java.util.TimerTask() { public void run(){
 			listenForMessages(MainActivity.bluetoothManager.getTransferSocket()); }
-		}, 0, 20);
+		}, 0, 80);
+
+		initUI();
 	}
 	private void initTextView(int type){
 		par1=(TextView)findViewById(R.id.par1);
@@ -216,75 +202,79 @@ public class TestCircleAcitvity extends ActionBarActivity {
 		}
 	}
 	private void initUI(){
-		if(type==TestCircleAcitvity.CURRENT_TEST){
-			byte[] sendByte = new byte[]{'G', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-			sendByte[2]=6;
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
+		for(int ii=0;ii<2;ii++) {
+			for(int iii=0;iii<2000;iii++);
+			if (type == TestCircleAcitvity.CURRENT_TEST) {
+				Log.e("init","init");
+				byte[] sendByte = new byte[]{'G', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+				sendByte[2] = 6;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<2000;i++);
-			sendByte[7]=0;
-			sendByte[2]=7;
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
+				//for (int i = 0; i < 2000; i++) ;
+				sendByte[7] = 0;
+				sendByte[2] = 7;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<2000;i++);
-			sendByte[7]=0;
-			sendByte[2]=8;
-			for(int i=0;i<7;i++){
-				sendByte[7]+=sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
-		}else if(type==TestCircleAcitvity.LOCATION_TEST) {
-			byte[] sendByte = new byte[]{'G', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-			sendByte[2] = 0;
-			for (int i = 0; i < 7; i++) {
-				sendByte[7] += sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
+				//for (int i = 0; i < 2000; i++) ;
+				sendByte[7] = 0;
+				sendByte[2] = 8;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
+			} else if (type == TestCircleAcitvity.LOCATION_TEST) {
+				byte[] sendByte = new byte[]{'G', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+				sendByte[2] = 0;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<1000;i++);
-			sendByte[7]=0;
-			sendByte[2]=1;
-			for (int i = 0; i < 7; i++) {
-				sendByte[7] += sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
+				//for (int i = 0; i < 2000; i++) ;
+				sendByte[7] = 0;
+				sendByte[2] = 1;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<1000;i++);
-			sendByte[7]=0;
-			sendByte[2] = 2;
-			for (int i = 0; i < 7; i++) {
-				sendByte[7] += sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
-		}else if(type==TestCircleAcitvity.SPEED_TEST) {
-			byte[] sendByte = new byte[]{'G', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-			sendByte[2] = 3;
-			for (int i = 0; i < 7; i++) {
-				sendByte[7] += sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
+				//for (int i = 0; i < 2000; i++) ;
+				sendByte[7] = 0;
+				sendByte[2] = 2;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
+			} else if (type == TestCircleAcitvity.SPEED_TEST) {
+				byte[] sendByte = new byte[]{'G', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+				sendByte[2] = 3;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<1000;i++);
-			sendByte[7]=0;
-			sendByte[2] = 4;
-			for (int i = 0; i < 7; i++) {
-				sendByte[7] += sendByte[i];
-			}
-			MainActivity.bluetoothManager.send(sendByte);
+				//for (int i = 0; i < 2000; i++) ;
+				sendByte[7] = 0;
+				sendByte[2] = 4;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
 
-			for(int i=0;i<1000;i++);
-			sendByte[7]=0;
-			sendByte[2] = 5;
-			for (int i = 0; i < 7; i++) {
-				sendByte[7] += sendByte[i];
+				//for (int i = 0; i < 2000; i++) ;
+				sendByte[7] = 0;
+				sendByte[2] = 5;
+				for (int i = 0; i < 7; i++) {
+					sendByte[7] += sendByte[i];
+				}
+				MainActivity.bluetoothManager.send(sendByte);
 			}
-			MainActivity.bluetoothManager.send(sendByte);
 		}
 	}
 	private void initEditText(){
@@ -294,69 +284,81 @@ public class TestCircleAcitvity extends ActionBarActivity {
 		PEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus) {
-					byte[] sendByte = new byte[]{'S', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-					int num = (int) (Float.valueOf(PEdit.getText().toString()) * 100);
-					sendByte[3] = (byte) (num >> 8);
-					sendByte[4] = (byte) (num);
-					if (type == TestCircleAcitvity.CURRENT_TEST) {
-						sendByte[2] = 6;
-					} else if (type == TestCircleAcitvity.SPEED_TEST) {
-						sendByte[2] = 3;
-					} else if (type == TestCircleAcitvity.LOCATION_TEST) {
-						sendByte[2] = 0;
+				try {
+					if (!hasFocus) {
+						byte[] sendByte = new byte[]{'S', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+						int num = (int) (Float.valueOf(PEdit.getText().toString()) * 100);
+						sendByte[3] = (byte) (num >> 8);
+						sendByte[4] = (byte) (num);
+						if (type == TestCircleAcitvity.CURRENT_TEST) {
+							sendByte[2] = 6;
+						} else if (type == TestCircleAcitvity.SPEED_TEST) {
+							sendByte[2] = 3;
+						} else if (type == TestCircleAcitvity.LOCATION_TEST) {
+							sendByte[2] = 0;
+						}
+						for (int i = 0; i < 7; i++) {
+							sendByte[7] += sendByte[i];
+						}
+						if (sendingFlag)
+							MainActivity.bluetoothManager.send(sendByte);
 					}
-					for (int i = 0; i < 7; i++) {
-						sendByte[7] += sendByte[i];
-					}
-					if (sendingFlag)
-						MainActivity.bluetoothManager.send(sendByte);
+				}catch (Exception e){
+					e.printStackTrace();
 				}
 			}
 		});
 		IEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus) {
-					byte[] sendByte = new byte[]{'S', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-					int num = (int) (Float.valueOf(IEdit.getText().toString()) * 100);
-					sendByte[3] = (byte) (num >> 8);
-					sendByte[4] = (byte) (num);
-					if (type == TestCircleAcitvity.CURRENT_TEST) {
-						sendByte[2] = 7;
-					} else if (type == TestCircleAcitvity.SPEED_TEST) {
-						sendByte[2] = 4;
-					} else if (type == TestCircleAcitvity.LOCATION_TEST) {
-						sendByte[2] = 1;
+				try {
+					if (!hasFocus) {
+						byte[] sendByte = new byte[]{'S', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+						int num = (int) (Float.valueOf(IEdit.getText().toString()) * 100);
+						sendByte[3] = (byte) (num >> 8);
+						sendByte[4] = (byte) (num);
+						if (type == TestCircleAcitvity.CURRENT_TEST) {
+							sendByte[2] = 7;
+						} else if (type == TestCircleAcitvity.SPEED_TEST) {
+							sendByte[2] = 4;
+						} else if (type == TestCircleAcitvity.LOCATION_TEST) {
+							sendByte[2] = 1;
+						}
+						for (int i = 0; i < 7; i++) {
+							sendByte[7] += sendByte[i];
+						}
+						if (sendingFlag)
+							MainActivity.bluetoothManager.send(sendByte);
 					}
-					for (int i = 0; i < 7; i++) {
-						sendByte[7] += sendByte[i];
-					}
-					if (sendingFlag)
-						MainActivity.bluetoothManager.send(sendByte);
+				}catch (Exception e){
+					e.printStackTrace();
 				}
 			}
 		});
 		DEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus) {
-					byte[] sendByte = new byte[]{'S', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-					int num = (int) (Float.valueOf(DEdit.getText().toString()) * 100);
-					sendByte[3] = (byte) (num >> 8);
-					sendByte[4] = (byte) (num);
-					if (type == TestCircleAcitvity.CURRENT_TEST) {
-						sendByte[2] = 8;
-					} else if (type == TestCircleAcitvity.SPEED_TEST) {
-						sendByte[2] = 5;
-					} else if (type == TestCircleAcitvity.LOCATION_TEST) {
-						sendByte[2] = 2;
+				try {
+					if (!hasFocus) {
+						byte[] sendByte = new byte[]{'S', 'J', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+						int num = (int) (Float.valueOf(DEdit.getText().toString()) * 100);
+						sendByte[3] = (byte) (num >> 8);
+						sendByte[4] = (byte) (num);
+						if (type == TestCircleAcitvity.CURRENT_TEST) {
+							sendByte[2] = 8;
+						} else if (type == TestCircleAcitvity.SPEED_TEST) {
+							sendByte[2] = 5;
+						} else if (type == TestCircleAcitvity.LOCATION_TEST) {
+							sendByte[2] = 2;
+						}
+						for (int i = 0; i < 7; i++) {
+							sendByte[7] += sendByte[i];
+						}
+						if (sendingFlag)
+							MainActivity.bluetoothManager.send(sendByte);
 					}
-					for (int i = 0; i < 7; i++) {
-						sendByte[7] += sendByte[i];
-					}
-					if (sendingFlag)
-						MainActivity.bluetoothManager.send(sendByte);
+				}catch (Exception e){
+					e.printStackTrace();
 				}
 			}
 		});
@@ -708,39 +710,33 @@ public class TestCircleAcitvity extends ActionBarActivity {
 		return false;
 	}
 
-
 	private void listenForMessages(BluetoothSocket socket){
 		listening = true;
-
 		Message message;
-		int pointer=0;
 		try {
 			InputStream inputStream = socket.getInputStream();
-			//while (listening){
-//				this.wait(100L);
 				int bufferSize = 10;
 				byte[] bytes = new byte[bufferSize];
-
-//				bytes[pointer]=(byte)inputStream.read();
-//				Log.e("get",Integer.toHexString(bytes[pointer]));
-//				pointer++;
-				//if(pointer==7){
-//					pointer=0;
-
 				int length = inputStream.read(bytes,0,10);
-				while(length!=10){
-					length=length+inputStream.read(bytes,length,10-length);
+				while (length != 10) {
+					length = length + inputStream.read(bytes, length, 10 - length);
 				}
+//				if(bytes[0]>122||bytes[0]<97){
+//					byte onebtye;
+//					do{
+//						onebtye = (byte)inputStream.read();
+//					}
+//					while(onebtye!=(byte)0x0a);
+//					onebtye=bytes[0];
+//					inputStream.read(bytes,1,9);
+//
+//				}
 				message=new Message();
 				message.what=12345;
 				Bundle bundle=new Bundle();
 				bundle.putByteArray("bytes",bytes);
 				message.setData(bundle);
 				myHandler.sendMessage(message);
-
-
-			//}
-
 		}catch (IOException e){
 			e.printStackTrace();
 		}
@@ -748,7 +744,13 @@ public class TestCircleAcitvity extends ActionBarActivity {
 
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
-		lisThread.interrupt();
+		try {
+			timer.cancel();
+			super.onDestroy();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
 	}
+
+
 }

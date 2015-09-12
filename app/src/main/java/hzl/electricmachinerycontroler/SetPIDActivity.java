@@ -1,10 +1,13 @@
 package hzl.electricmachinerycontroler;
 
 
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -23,6 +26,10 @@ import com.gc.materialdesign.views.ButtonRectangle;
 import com.gc.materialdesign.views.ProgressBarCircularIndeterminate;
 import com.gc.materialdesign.views.ProgressBarIndeterminate;
 import com.gc.materialdesign.views.ProgressBarIndeterminateDeterminate;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Timer;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 
@@ -52,6 +59,97 @@ public class SetPIDActivity extends ActionBarActivity {
 	int pointPointer1=0;
 	float[] point2=new float[10];
 	int pointPointer2=0;
+	Timer timer;
+	boolean listening=false;
+
+	Thread lisThread = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			listenForMessages(MainActivity.bluetoothManager.getTransferSocket());
+		}
+	});
+	Handler myHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+				case 12345:
+					Bundle bundle=msg.getData();
+					byte[] bytes=bundle.getByteArray("bytes");
+					try {
+						if(bytes[0]=='g' && bytes[1]=='j'){
+							progress++;
+							if(bytes[2]==0){
+								PPEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}else if(bytes[2]==1){
+								PIEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}else if(bytes[2]==2){
+								PDEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}
+							if(bytes[2]==3){
+								IPEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}else if(bytes[2]==4){
+								IIEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}else if(bytes[2]==5){
+								IDEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}
+							if(bytes[2]==6){
+								VPEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}else if(bytes[2]==7){
+								VIEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}else if(bytes[2]==8){
+								VDEdit.setText(String.valueOf( (bytes[3]*256+bytes[4])/100.0));
+							}
+							progressBarIndeterminate.setProgress(progress*10);
+							if(progress==10){
+								progressBarIndeterminate.setProgress(0);
+								progressBarIndeterminate.setVisibility(View.GONE);
+								toast.setText("自整定完成");
+								toast.show();
+							}
+						}else if(bytes[0]=='g'&&bytes[1]=='j'){
+							if(bytes[2]==0||bytes[2]==1) {
+								if(pointPointer1==10) {
+									pointPointer1 = 0;
+									linePic.setPoints1(point1);
+								}
+								point1[pointPointer1] = (bytes[5] * 256 + bytes[6]);
+								pointPointer1++;
+							}
+							else if(bytes[2]==3||bytes[2]==4) {
+								if(pointPointer2==10) {
+									pointPointer2 = 0;
+									linePic.setPoints2(point2);
+								}
+								point2[pointPointer2] = (bytes[5] * 256 + bytes[6]);
+								pointPointer2++;
+							}
+						}else if(bytes[0]=='r'&&bytes[1]=='c'){
+							if(bytes[2]==0) {
+								if(pointPointer1==10) {
+									pointPointer1 = 0;
+									linePic.setPoints1(point1);
+								}
+								point1[pointPointer1] = (bytes[5] * 256 + bytes[6]);
+								pointPointer1++;
+							}
+							else if(bytes[2]==1) {
+								if(pointPointer2==10) {
+									pointPointer2 = 0;
+									linePic.setPoints2(point2);
+								}
+								point2[pointPointer2] = (bytes[5] * 256 + bytes[6]);
+								pointPointer2++;
+							}
+						}
+					}catch (Exception e){
+						e.printStackTrace();
+						toast.setText("蓝牙无连接");
+						toast.show();
+					}
+					break;
+			}
+			super.handleMessage(msg);
+		}
+	};
 	private BluetoothSPP.OnDataReceivedListener ParActivityDataRecier = new BluetoothSPP.OnDataReceivedListener() {
 		@Override
 		public void onDataReceived(byte[] bytes, String s) {
@@ -135,11 +233,16 @@ public class SetPIDActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_set_pid_layout);
 		progressBarIndeterminate=(ProgressBarIndeterminate)findViewById(R.id.progressBarIndeterminate);
 		toast=Toast.makeText(this,"异常",Toast.LENGTH_LONG);
-		MainActivity.bt.setOnDataReceivedListener(ParActivityDataRecier);
+		//MainActivity.bt.setOnDataReceivedListener(ParActivityDataRecier);
 		initToolBar();
 		initBtn();
 		initEditText();
 		linePic =(MyBitmapView)findViewById(R.id.linePic);
+
+		timer = new Timer(true);
+		timer.schedule(new java.util.TimerTask() { public void run(){
+			listenForMessages(MainActivity.bluetoothManager.getTransferSocket()); }
+		}, 0, 100);
 	}
 
 	private void initToolBar(){
@@ -212,7 +315,7 @@ public class SetPIDActivity extends ActionBarActivity {
 					for(int i=0;i<7;i++){
 						sendByte[7]+=sendByte[i];
 					}
-					MainActivity.bt.send(sendByte, false);
+					MainActivity.bluetoothManager.send(sendByte);
 					progressBarIndeterminate.setVisibility(View.VISIBLE);
 					progressBarIndeterminate.setMax(100);
 					progressBarIndeterminate.setMin(0);
@@ -236,7 +339,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 						para = (int)(Float.valueOf(VIEdit.getText().toString())*100);
 						sendByte[2]=4;
 						sendByte[3]=(byte)(para>>8);
@@ -244,7 +347,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 						para = (int)(Float.valueOf(VDEdit.getText().toString())*100);
 						sendByte[2]=5;
 						sendByte[3]=(byte)(para>>8);
@@ -252,7 +355,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 
 						sendByte = new byte[]{'T', 'P', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 						para = (Integer.valueOf(VDEdit.getText().toString()));
@@ -262,7 +365,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 					}else if(testSta==2){
 						para = (int)(Float.valueOf(IPEdit.getText().toString())*100);
 						sendByte[2]=6;
@@ -271,7 +374,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 						para = (int)(Float.valueOf(IIEdit.getText().toString())*100);
 						sendByte[2]=7;
 						sendByte[3]=(byte)(para>>8);
@@ -279,7 +382,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 						para = (int)(Float.valueOf(IDEdit.getText().toString())*100);
 						sendByte[2]=8;
 						sendByte[3]=(byte)(para>>8);
@@ -287,7 +390,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 
 						sendByte = new byte[]{'T', 'P', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 						para = (int)(Float.valueOf(VDEdit.getText().toString())*10);
@@ -297,7 +400,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 					}else if(testSta==3){
 						para = (int)(Float.valueOf(PPEdit.getText().toString())*100);
 						sendByte[2]=0;
@@ -306,7 +409,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 						para = (int)(Float.valueOf(PIEdit.getText().toString())*100);
 						sendByte[2]=1;
 						sendByte[3]=(byte)(para>>8);
@@ -314,7 +417,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 						para = (int)(Float.valueOf(PDEdit.getText().toString())*100);
 						sendByte[2]=2;
 						sendByte[3]=(byte)(para>>8);
@@ -322,7 +425,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 
 						sendByte = new byte[]{'T', 'P', 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 						para = (Integer.valueOf(VDEdit.getText().toString()));
@@ -334,7 +437,7 @@ public class SetPIDActivity extends ActionBarActivity {
 						for(int i=0;i<7;i++){
 							sendByte[7]+=sendByte[i];
 						}
-						MainActivity.bt.send(sendByte, false);
+						MainActivity.bluetoothManager.send(sendByte);
 					}
 				}catch (Exception e){
 					e.printStackTrace();
@@ -381,5 +484,50 @@ public class SetPIDActivity extends ActionBarActivity {
 		}
 		return false;
 	}
+
+	private void listenForMessages(BluetoothSocket socket){
+		listening = true;
+		Message message;
+		try {
+			InputStream inputStream = socket.getInputStream();
+			int bufferSize = 10;
+			byte[] bytes = new byte[bufferSize];
+			int length = inputStream.read(bytes,0,10);
+			while(length!=10){
+				length=length+inputStream.read(bytes,length,10-length);
+			}
+//			if(bytes[0]>122||bytes[0]<97){
+//				byte onebtye;
+//				do{
+//					onebtye = (byte)inputStream.read();
+//				}
+//				while(onebtye!=(byte)0x0a);
+//				onebt
+// ye=bytes[0];
+//				inputStream.read(bytes,1,9);
+//
+//			}
+			message=new Message();
+			message.what=12345;
+			Bundle bundle=new Bundle();
+			bundle.putByteArray("bytes",bytes);
+			message.setData(bundle);
+			myHandler.sendMessage(message);
+		}catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		try {
+			timer.cancel();
+			super.onDestroy();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+
 }
 

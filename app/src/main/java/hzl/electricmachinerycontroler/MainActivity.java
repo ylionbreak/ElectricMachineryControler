@@ -57,11 +57,11 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
-		//toast=Toast.makeText(this,"",Toast.LENGTH_LONG);
-		//Bmob.initialize(this,"2fd5105040c345638bf1905310730101");
-		//isTui();
-		//dataManager = new DBManager(this);
-		//updataContent();
+		toast=Toast.makeText(this,"",Toast.LENGTH_LONG);
+		Bmob.initialize(this,"2fd5105040c345638bf1905310730101");
+		isTui();
+		dataManager = new DBManager(this);
+		updataContent();
 //		try{
 //				bt = new BluetoothSPP(MainActivity.this);
 //				bt.setupService();
